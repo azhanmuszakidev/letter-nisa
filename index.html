@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Letter For Nurnisa Nasuha</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <video class="background-video" autoplay muted loop playsinline aria-hidden="true">
+        <source src="background.mp4" type="video/mp4">
+    </video>
+
+    <main class="page-content">
+        <center>
+            <h1>&#127801; Letter For Nurnisa Nasuha &#127801;</h1>
+
+            <div class="letter">
+                <h4>Dear Sweet Nurnisa Nasuha,</h4>
+                <h4>Macam mana life dekat Kedah tu? Harap awak baik-baik saja dan jumpa kawan-kawan yang baik. Saya nak sangat borak dengan awak, tapi awak busy kan, 
+                    jadi tak mahu la kacau awak sangat. TAPIII kalau boleh kacau, memang saya spam je chat awak hoho.</h4>
+
+                <h4>Sejak jarang sembang dengan awak ni, baran saya ni selalu turn on (bukan baran sampai nak rembat orang ye). Saya selalu stalk repost awak, tiap masa la juga ek 🗿.
+                    Kadang saya nak chat awak tapi memikir topic apa yang seronok nak borak sama ii., Bosan kan saya ni 🗿. </h4>
+
+                <h4>Last kita keluar sama sebelum awak pergi Kedah, saya rasa happy gilo. Bila tengok awak saya tak berhenti senyum, lagi tak boleh stop senyum bila akak kedai tu fikir saya ni husband awak
+                    HAHAHAHAHA. Thankyou bagi gambar passport tu, disimpan elok dalam dompet. 
+                    <p class="click-text" role="button" tabindex="0"
+                        data-image="comei.jpg">
+                        🌹 cuba tekan sini ehem 🌹
+                    </p>
+                </h4>
+
+                <h4>
+                    Saya dah taktahu nak cakap apa dah, idea habis dah hohoho. Saya nak cakap awak ni special untuk saya, mungkin kita kawan lama tapi tak berborak sangat. 2025 baru kita rapat.
+                    Saya sayang awak sangat sangat, saya nak awak happy selalu, saya nak awak senyum selalu.  
+                </h4>
+                
+                <h4>
+                    saya harap awak tak stress sangat dengan life study dekat sana. Saya nak awak jaga diri baik-baik, jangan sakit-sakit.
+                    Kalau sedih, jangan simpan sorang-sorang, cerita dengan kawan ii (saya pun bole hehe). Saya nak awak happy selalu. Kalau ada rezeki, nak je saya jumpa
+                    awak dekat sana HAHAHAH, apalah sangat 500km tu 🗿.
+                </h4>
+
+                <h4>Saya rindu kita sangat sangat, saya tunggu awak sampai bila bila..
+                    <p class="click-text" role="button" tabindex="0"
+                            data-image="rindu.png">
+                            🌹 singgah sini 🌹
+                    </p>
+                </h4>
+
+            </div>
+            <div>
+                <audio controls autoplay loop>
+                    <source src="BATAS SENJA - Nanti Kita Seperti Ini ( OFFICIAL LIRIK VIDEO ) - Batas Senja Official.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+        </center>
+    </main>
+
+    <div id="imageModal" class="modal"
+        role="dialog" aria-modal="true"
+        aria-label="Gambar kenangan" hidden>
+
+        <button class="close" type="button"
+            aria-label="Tutup gambar">&times;</button>
+
+        <img src="" class="modal-content" alt="Gambar kenangan">
+    </div>
+
+    
+
+
+<script>
+    const clickTexts = document.querySelectorAll(".click-text");
+    const imageModal = document.getElementById("imageModal");
+    const modalImage = imageModal.querySelector(".modal-content");
+    const closeButton = imageModal.querySelector(".close");
+
+    let lastClickedText = null;
+
+    function openImage(text) {
+        lastClickedText = text;
+        modalImage.src = text.dataset.image;
+        imageModal.hidden = false;
+        closeButton.focus();
+    }
+
+    function closeImage() {
+        imageModal.hidden = true;
+
+        if (lastClickedText) {
+            lastClickedText.focus();
+        }
+    }
+
+    clickTexts.forEach((text) => {
+        text.addEventListener("click", () => openImage(text));
+
+        text.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                openImage(text);
+            }
+        });
+    });
+
+    closeButton.addEventListener("click", closeImage);
+
+    imageModal.addEventListener("click", (event) => {
+        if (event.target === imageModal) {
+            closeImage();
+        }
+    });
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && !imageModal.hidden) {
+            closeImage();
+        }
+    });
+</script>
+
+
+
+</body>
+</html>
