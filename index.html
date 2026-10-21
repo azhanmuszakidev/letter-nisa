@@ -515,14 +515,13 @@
 
                     <p>
                         Saya rindu bila first kita jumpa sebagai partner dekat hospital. Tak bersiap sangat tapi nak sangat jumpa awak.
-                        Walaupun tak bersiap, bareface tapi tetap cantik & comei. 
+                        Walaupun tak bersiap, bareface tapi tetap cantik & comei. You always make me smile when you yapping.
                         Kalau diberi peluang untuk saya jaga hati awak balik, memang saya takkan sia-siakan peluang tu.
                     </p>
 
                     <p>
-                        <!--[Apa yang kau fikirkan, apa yang berlaku,
-                        atau apa yang kau nak sampaikan kepada Nisa.]
-                        -->
+                        Tapi saya tahu awak takut benda sama jadi lagi, saya faham. Saya biar awak sedih sorang malam malam, buat awak rasa tak dihargai dan saya ego.
+                        Saya minta maaf ya Nurnisa Nasuha buat awak terasa hati selama ni...
                     </p>
 
                     <p class="signature">- an hensem</p>
@@ -729,6 +728,31 @@
                 closeImage();
             }
         });
+
+        function showDay(index) {
+    currentDay = Math.max(0, Math.min(index, dailySpreads.length - 1));
+
+    dailySpreads.forEach((spread, i) => {
+        spread.hidden = i !== currentDay;
+        spread.classList.remove("slide-in-left", "slide-in-right");
+    });
+
+    dayCounter.textContent =
+        `Day ${String(currentDay + 1).padStart(2, "0")} / ${String(dailySpreads.length).padStart(2, "0")}`;
+
+    // Simpan halaman semasa
+    localStorage.setItem("letterBookCurrentDay", currentDay);
+}
+
+// Pulihkan halaman terakhir selepas refresh
+const savedDay = localStorage.getItem("letterBookCurrentDay");
+
+if (savedDay !== null) {
+    showDay(Number(savedDay));
+} else {
+    showDay(0);
+}
+
     </script>
 </body>
 </html>
