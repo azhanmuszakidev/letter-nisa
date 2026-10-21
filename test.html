@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Letter For Nurnisa Nasuha</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <video class="background-video" autoplay muted loop playsinline aria-hidden="true">
+        <source src="1021.mp4" type="video/mp4">
+    </video>
+
+    <div class="question">
+        <h2>Awak suka saya tak ? 🥺👉👈</h2>
+
+        <div class="buttons">
+            <button id="yesBtn">YES ❤️</button>
+            <button id="noBtn">NO 🙄</button>
+        </div>
+
+        <p id="result"></p>
+    </div>
+
+    <style>
+        .question {
+            text-align: center;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            min-height: 100px;
+            align-items: center;
+        }
+
+        .buttons button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #yesBtn {
+            background: #ff69b4;
+            color: white;
+        }
+
+        #noBtn {
+            background: #ddd;
+            color: #333;
+            position: relative;
+        }
+
+        #result {
+            font-size: 20px;
+            color: #ff69b4;
+            font-weight: bold;
+        }
+
+        
+body {
+    margin: 0;
+    min-height: 100vh;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+}
+
+.question {
+    position: relative;
+    z-index: 10;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    color: white;
+    text-align: center;
+    text-shadow: 0 2px 5px black;
+}
+
+.question h2 {
+    color: white;
+    font-size: clamp(24px, 5vw, 36px);
+}
+
+.buttons {
+    position: relative;
+    z-index: 11;
+}
+
+#yesBtn,
+#noBtn {
+    position: relative;
+    z-index: 12;
+    text-shadow: none;
+}
+
+    </style>
+
+    <script>
+        const noBtn = document.getElementById("noBtn");
+        const yesBtn = document.getElementById("yesBtn");
+        const result = document.getElementById("result");
+
+        function runAway() {
+            noBtn.style.position = "fixed";
+
+            const maxX = window.innerWidth - noBtn.offsetWidth - 10;
+            const maxY = window.innerHeight - noBtn.offsetHeight - 10;
+
+            noBtn.style.left = Math.max(10, Math.random() * maxX) + "px";
+            noBtn.style.top = Math.max(10, Math.random() * maxY) + "px";
+        }
+
+        noBtn.addEventListener("pointerenter", runAway);
+        noBtn.addEventListener("touchstart", function(event) {
+            event.preventDefault();
+            runAway();
+        });
+
+        noBtn.addEventListener("click", runAway);
+
+        yesBtn.addEventListener("click", function() {
+            result.textContent = "HAHAHAHAHAH YES! ❤️🥰";
+        });
+    </script>
+</body>
+</html>
