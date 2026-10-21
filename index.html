@@ -1,127 +1,738 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Letter For Nurnisa Nasuha</title>
+
+    <title>Daily Letter Book - Nurnisa Nasuha</title>
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        :root {
+            --paper: #fff9ee;
+            --paper-edge: #e7d4b9;
+            --rose: #94505d;
+            --rose-light: #f7e4e5;
+            --ink: #59443d;
+        }
+
+        .daily-book {
+            width: min(1000px, 94%);
+            margin: 24px auto;
+            color: var(--ink);
+        }
+
+        .book-title {
+            text-align: center;
+            color: white;
+            text-shadow: 0 2px 8px #0009;
+            margin: 20px 0;
+        }
+
+        .book-subtitle {
+            text-align: center;
+            color: #fff1ed;
+            margin: -8px 0 22px;
+            font-size: 14px;
+        }
+
+        /* Each spread represents one day */
+        .daily-spread {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--paper-edge);
+            border-radius: 12px;
+            background: var(--paper);
+            box-shadow: 0 15px 45px #0005;
+        }
+
+        .daily-spread[hidden] {
+            display: none !important;
+        }
+
+        .daily-page {
+            min-width: 0;
+            min-height: 480px;
+            box-sizing: border-box;
+            padding: clamp(16px, 3.5vw, 35px);
+            background: linear-gradient(
+                90deg,
+                #f7ecda,
+                #fffaf1 15%,
+                #fffaf1 85%,
+                #f3e4ce
+            );
+        }
+
+        .photo-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-right: 1px solid var(--paper-edge);
+            gap: 15px;
+        }
+
+        .letter-page {
+            overflow-y: auto;
+            max-height: 650px;
+            position: relative;
+            padding-bottom: 42px;
+        }
+
+        .day-label {
+            color: var(--rose);
+            font: bold 13px Georgia, serif;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        .letter-page h2 {
+            color: var(--rose);
+            font: bold clamp(20px, 2.4vw, 27px)/1.4 Georgia, serif;
+            margin: 12px 0 18px;
+        }
+
+        .letter-page p {
+            color: var(--ink);
+            font: 16px/1.9 Georgia, "Times New Roman", serif;
+            margin: 0 0 17px;
+            overflow-wrap: anywhere;
+        }
+
+        .letter-date {
+            color: #9a8271;
+            font: italic 13px Georgia, serif;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .day-photo {
+            display: block;
+            width: 100%;
+            max-height: 330px;
+            object-fit: contain;
+            border-radius: 6px;
+            cursor: zoom-in;
+            filter: drop-shadow(0 5px 7px #0002);
+            transition: transform 0.25s ease;
+        }
+
+        .day-photo:hover {
+            transform: scale(1.025);
+        }
+
+        .photo-caption {
+            color: #9a716c;
+            font: italic 14px Georgia, serif;
+            text-align: center;
+        }
+
+        .photo-placeholder {
+            width: 100%;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            color: #a36a74;
+            background: #f5e4df;
+            border: 1px dashed #c99da1;
+            border-radius: 8px;
+            text-align: center;
+            box-sizing: border-box;
+            padding: 20px;
+        }
+
+        .photo-placeholder .flower {
+            font-size: 45px;
+        }
+
+        .click-text {
+            color: #a24e60 !important;
+            font-weight: bold !important;
+            text-align: center;
+            cursor: pointer;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+            padding: 5px 0;
+        }
+
+        .click-text:hover {
+            color: #d04f70 !important;
+        }
+
+        .click-text:focus-visible,
+        .day-photo:focus-visible {
+            outline: 2px solid var(--rose);
+            outline-offset: 4px;
+        }
+
+        .signature {
+            text-align: center !important;
+            color: var(--rose) !important;
+            margin-top: 30px !important;
+            font-weight: bold !important;
+        }
+
+        .page-number {
+            position: absolute;
+            bottom: 12px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: #a18b77;
+            font: 12px Georgia, serif;
+        }
+
+        /* Navigation */
+        .book-navigation {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .book-navigation button {
+            border: 1px solid #f4d6d9;
+            border-radius: 30px;
+            padding: 12px 20px;
+            background: #fff5f1;
+            color: #854856;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .book-navigation button:hover:not(:disabled) {
+            background: var(--rose-light);
+            transform: translateY(-2px);
+        }
+
+        .book-navigation button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .book-counter {
+            color: white;
+            text-align: center;
+            font-size: 13px;
+            text-shadow: 0 1px 5px #000;
+        }
+
+        /* Smooth slide */
+        .slide-out-left {
+            animation: outLeft 0.28s ease both;
+        }
+
+        .slide-out-right {
+            animation: outRight 0.28s ease both;
+        }
+
+        .slide-in-left {
+            animation: inLeft 0.35s ease both;
+        }
+
+        .slide-in-right {
+            animation: inRight 0.35s ease both;
+        }
+
+        @keyframes outLeft {
+            to { opacity: 0; transform: translateX(-30px); }
+        }
+
+        @keyframes outRight {
+            to { opacity: 0; transform: translateX(30px); }
+        }
+
+        @keyframes inLeft {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes inRight {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Modal */
+        .modal[hidden] {
+            display: none !important;
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgb(0 0 0 / 88%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .modal-content {
+            max-width: min(90vw, 850px);
+            max-height: 82vh;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .modal .close {
+            position: absolute;
+            top: 12px;
+            right: 24px;
+            color: white;
+            background: transparent;
+            border: none;
+            font-size: 40px;
+            cursor: pointer;
+        }
+
+        .audio-player {
+            text-align: center;
+            margin: 25px auto;
+        }
+
+        .audio-player audio {
+            max-width: 100%;
+        }
+
+        @media (max-width: 600px) {
+            .daily-book {
+                width: 97%;
+            }
+
+            .daily-page {
+                min-height: 420px;
+                padding: 15px 11px 36px;
+            }
+
+            .letter-page {
+                max-height: 70vh;
+            }
+
+            .letter-page p {
+                font-size: 13px;
+                line-height: 1.75;
+            }
+
+            .letter-page h2 {
+                font-size: 18px;
+            }
+
+            .day-photo {
+                max-height: 230px;
+            }
+
+            .photo-placeholder {
+                min-height: 180px;
+                padding: 10px;
+                font-size: 12px;
+            }
+
+            .photo-placeholder .flower {
+                font-size: 32px;
+            }
+
+            .photo-caption {
+                font-size: 12px;
+            }
+
+            .book-navigation button {
+                padding: 10px 12px;
+                font-size: 12px;
+            }
+
+            .book-counter {
+                font-size: 11px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .slide-out-left,
+            .slide-out-right,
+            .slide-in-left,
+            .slide-in-right {
+                animation-duration: 0.01ms;
+            }
+        }
+    </style>
 </head>
+
 <body>
-    <video class="background-video" autoplay muted loop playsinline aria-hidden="true">
+    <!-- Background video -->
+    <video class="background-video"
+           autoplay muted loop playsinline aria-hidden="true">
         <source src="1021.mp4" type="video/mp4">
     </video>
 
     <main class="page-content">
-        <center>
-            <h1>&#127801; Letter For Nurnisa Nasuha &#127801;</h1>
+        <div class="daily-book">
+            <h1 class="book-title">
+                🌹 Daily Letter Book 🌹
+            </h1>
 
-            <div class="letter">
-                <h4>Dear Sweet Nurnisa Nasuha,</h4>
-                <h4>Macam mana life dekat Kedah tu? Harap awak baik-baik saja dan jumpa kawan-kawan yang baik. Saya nak sangat borak dengan awak, tapi awak busy kan, 
-                    jadi tak mahu la kacau awak sangat. TAPIII kalau boleh kacau, memang saya spam je chat awak hoho.</h4>
+            <p class="book-subtitle">
+                A little story for Nurnisa Nasuha, one day at a time.
+            </p>
 
-                <h4>Sejak jarang sembang dengan awak ni, baran saya ni selalu turn on (bukan baran sampai nak rembat orang ye). Saya selalu stalk repost awak, tiap masa la juga ek 🗿.
-                    Kadang saya nak chat awak tapi memikir topic apa yang seronok nak borak sama ii., Bosan kan saya ni 🗿. </h4>
+            <!-- DAY 01: ORIGINAL LETTER -->
+            <section class="daily-spread" data-day="1">
+                <!-- LEFT PAGE: PHOTO -->
+                <article class="daily-page photo-page">
+                    <div class="day-label">21 / 10 /2026</div>
 
-                <h4>Last kita keluar sama sebelum awak pergi Kedah, saya rasa happy gilo. Bila tengok awak saya tak berhenti senyum, lagi tak boleh stop senyum bila akak kedai tu fikir saya ni husband awak
-                    HAHAHAHAHA. Thankyou bagi gambar passport tu, disimpan elok dalam dompet. 
-                    <p class="click-text" role="button" tabindex="0"
-                        data-image="comei.jpg">
+                    <img
+                        class="day-photo"
+                        src="rindu.png"
+                        alt="Gambar kenangan"
+                        tabindex="0"
+                        data-image="rindu.png">
+
+                    <!--<p class="photo-caption">
+                        A little memory to keep 🌹
+                    </p>
+                    
+
+                
+                    <p class="click-text"
+                       role="button"
+                       tabindex="0"
+                       data-image="rindu.png">
+                        🌹 singgah sini 🌹
+                    </p>
+                    -->
+
+                    <div class="page-number">— 01 —</div>
+                </article>
+
+                <!-- RIGHT PAGE: ORIGINAL LETTER CONTENT -->
+                <article class="daily-page letter-page">
+                    <div class="letter-date">21 / 10 /2026 · A letter for you</div>
+
+                    <h2>Dear Sweet Nurnisa Nasuha,</h2>
+
+                    <p>
+                        Macam mana life dekat Kedah tu? Harap awak
+                        baik-baik saja dan jumpa kawan-kawan yang baik.
+                        Saya nak sangat borak dengan awak, tapi awak busy
+                        kan, jadi tak mahu la kacau awak sangat. TAPIII
+                        kalau boleh kacau, memang saya spam je chat awak
+                        hoho.
+                    </p>
+
+                    <p>
+                        Sejak jarang sembang dengan awak ni, baran saya
+                        ni selalu turn on (bukan baran sampai nak rembat
+                        orang ye). Saya selalu stalk repost awak, tiap
+                        masa la juga ek 🗿. Kadang saya nak chat awak
+                        tapi memikir topic apa yang seronok nak borak
+                        sama ii., Bosan kan saya ni 🗿.
+                    </p>
+
+                    <p>
+                        Last kita keluar sama sebelum awak pergi Kedah,
+                        saya rasa happy gilo. Bila tengok awak saya tak
+                        berhenti senyum, lagi tak boleh stop senyum bila
+                        akak kedai tu fikir saya ni husband awak
+                        HAHAHAHAHA. Thankyou bagi gambar passport tu,
+                        disimpan elok dalam dompet.
+                    </p>
+
+                    <p class="click-text"
+                       role="button"
+                       tabindex="0"
+                       data-image="comei.jpg">
                         🌹 cuba tekan sini ehem 🌹
                     </p>
-                </h4>
 
-                <h4>
-                    Saya dah taktahu nak cakap apa dah, idea habis dah hohoho. Saya nak cakap awak ni special untuk saya, mungkin kita kawan lama tapi tak berborak sangat. 2025 baru kita rapat.
-                    Saya sayang awak sangat sangat, saya nak awak happy selalu, saya nak awak senyum selalu.  
-                </h4>
-                
-                <h4>
-                    saya harap awak tak stress sangat dengan life study dekat sana. Saya nak awak jaga diri baik-baik, jangan sakit-sakit.
-                    Kalau sedih, jangan simpan sorang-sorang, cerita dengan kawan ii (saya pun bole hehe). Saya nak awak happy selalu. Kalau ada rezeki, nak je saya jumpa
-                    awak dekat sana HAHAHAH, apalah sangat 500km tu 🗿.
-                </h4>
-
-                <h4>Saya rindu kita sangat sangat, saya tunggu awak sampai bila bila..
-                    <p class="click-text" role="button" tabindex="0"
-                            data-image="rindu.png">
-                            🌹 singgah sini 🌹
+                    <p>
+                        Saya dah taktahu nak cakap apa dah, idea habis
+                        dah hohoho. Saya nak cakap awak ni special untuk
+                        saya, mungkin kita kawan lama tapi tak berborak
+                        sangat. 2025 baru kita rapat. Saya sayang awak
+                        sangat sangat, saya nak awak happy selalu, saya
+                        nak awak senyum selalu.
                     </p>
-                </h4>
 
-                <!--<center><a href="test.html">Tekan sinii</a></center>-->
+                    <p>
+                        saya harap awak tak stress sangat dengan life
+                        study dekat sana. Saya nak awak jaga diri
+                        baik-baik, jangan sakit-sakit. Kalau sedih,
+                        jangan simpan sorang-sorang, cerita dengan
+                        kawan ii (saya pun bole hehe). Saya nak awak
+                        happy selalu. Kalau ada rezeki, nak je saya
+                        jumpa awak dekat sana HAHAHAH, apalah sangat
+                        500km tu 🗿.
+                    </p>
 
-            </div>
-            <div>
-                <audio controls autoplay loop>
-                    <source src="BATAS SENJA - Nanti Kita Seperti Ini ( OFFICIAL LIRIK VIDEO ) - Batas Senja Official.mp3" type="audio/mpeg">
-                    Your browser does not support the audio element.
-                </audio>
-            </div>
-        </center>
+                    <p>
+                        Saya rindu kita sangat sangat, saya tunggu awak
+                        sampai bila bila..
+                    </p>
+
+                    <p class="signature">- an hensem</p>
+
+                    <div class="page-number">— 02 —</div>
+                </article>
+            </section>
+
+            <!-- DAY 02: EXAMPLE ENTRY — EDIT THIS -->
+            <section class="daily-spread" data-day="2" hidden>
+                <!-- LEFT PAGE: CHANGE THE PHOTO -->
+                <article class="daily-page photo-page">
+                    <div class="day-label">Day 02 · Memories</div>
+
+                    <!-- Replace day02.jpg with your own image -->
+                    <div class="photo-placeholder" hidden>
+                        <span class="flower">🌹</span>
+                        <span>Letakkan gambar untuk Day 02</span>
+                        <span>Contoh: day02.jpg</span>
+                    </div>
+
+                    <img
+                        class="day-photo"
+                        src="day02.jpg"
+                        alt="Gambar kenangan Day 02"
+                        tabindex="0"
+                        data-image="day02.jpg">
+
+                    <p class="photo-caption">
+                        Another day, another memory.
+                    </p>
+
+                    <div class="page-number">— 03 —</div>
+                </article>
+
+                <!-- RIGHT PAGE: WRITE YOUR DAILY LETTER -->
+                <article class="daily-page letter-page">
+                    <div class="letter-date">Day 02 · [Tulis tarikh]</div>
+
+                    <h2>Dear Nisa,</h2>
+
+                    <p>
+                        [Tulis cerita kau untuk hari ini di sini.]
+                    </p>
+
+                    <p>
+                        [Apa yang kau fikirkan, apa yang berlaku,
+                        atau apa yang kau nak sampaikan kepada Nisa.]
+                    </p>
+
+                    <p class="signature">- an hensem</p>
+
+                    <div class="page-number">— 04 —</div>
+                </article>
+            </section>
+
+            <!-- NAVIGATION -->
+            <nav class="book-navigation" aria-label="Navigasi diari">
+                <button id="prevDay" type="button" disabled>
+                    ← Previous
+                </button>
+
+                <span id="dayCounter"
+                      class="book-counter"
+                      aria-live="polite">
+                    Day 01 of 02
+                </span>
+
+                <button id="nextDay" type="button">
+                    Next Day →
+                </button>
+            </nav>
+        </div>
+
+        <!-- Original audio -->
+        <div class="audio-player">
+            <audio controls autoplay loop>
+                <source
+                    src="BATAS SENJA - Nanti Kita Seperti Ini ( OFFICIAL LIRIK VIDEO ) - Batas Senja Official.mp3"
+                    type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
     </main>
 
-    <div id="imageModal" class="modal"
-        role="dialog" aria-modal="true"
-        aria-label="Gambar kenangan" hidden>
+    <!-- Image modal -->
+    <div id="imageModal"
+         class="modal"
+         role="dialog"
+         aria-modal="true"
+         aria-label="Gambar kenangan"
+         hidden>
 
-        <button class="close" type="button"
-            aria-label="Tutup gambar">&times;</button>
+        <button class="close"
+                type="button"
+                aria-label="Tutup gambar">&times;</button>
 
-        <img src="" class="modal-content" alt="Gambar kenangan">
+        <img src=""
+             class="modal-content"
+             alt="Gambar kenangan">
     </div>
 
+    <script>
+        // DAILY LETTER BOOK
+        const spreads = Array.from(
+            document.querySelectorAll(".daily-spread")
+        );
 
-<script>
-    const clickTexts = document.querySelectorAll(".click-text");
-    const imageModal = document.getElementById("imageModal");
-    const modalImage = imageModal.querySelector(".modal-content");
-    const closeButton = imageModal.querySelector(".close");
+        const prevDay = document.getElementById("prevDay");
+        const nextDay = document.getElementById("nextDay");
+        const dayCounter = document.getElementById("dayCounter");
 
-    let lastClickedText = null;
+        let currentDay = 0;
+        let isAnimating = false;
 
-    function openImage(text) {
-        lastClickedText = text;
-        modalImage.src = text.dataset.image;
-        imageModal.hidden = false;
-        closeButton.focus();
-    }
+        // Show a placeholder if a daily photo has not been added yet.
+        document.querySelectorAll(".daily-spread").forEach((spread) => {
+            const photo = spread.querySelector(".day-photo");
+            const placeholder = spread.querySelector(".photo-placeholder");
 
-    function closeImage() {
-        imageModal.hidden = true;
+            if (photo && placeholder) {
+                photo.addEventListener("error", () => {
+                    photo.hidden = true;
+                    placeholder.hidden = false;
+                });
 
-        if (lastClickedText) {
-            lastClickedText.focus();
-        }
-    }
+                photo.addEventListener("load", () => {
+                    photo.hidden = false;
+                    placeholder.hidden = true;
+                });
 
-    clickTexts.forEach((text) => {
-        text.addEventListener("click", () => openImage(text));
-
-        text.addEventListener("keydown", (event) => {
-            if (event.key === "Enter" || event.key === " ") {
-                event.preventDefault();
-                openImage(text);
+                // Handle cached or already-failed images.
+                if (photo.complete && photo.naturalWidth === 0) {
+                    photo.hidden = true;
+                    placeholder.hidden = false;
+                }
             }
         });
-    });
 
-    closeButton.addEventListener("click", closeImage);
+        function updateDayControls() {
+            prevDay.disabled = currentDay === 0;
+            nextDay.disabled = currentDay === spreads.length - 1;
 
-    imageModal.addEventListener("click", (event) => {
-        if (event.target === imageModal) {
-            closeImage();
+            dayCounter.textContent =
+                `Day ${String(currentDay + 1).padStart(2, "0")} of ` +
+                String(spreads.length).padStart(2, "0");
         }
-    });
 
-    document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape" && !imageModal.hidden) {
-            closeImage();
+        function changeDay(direction) {
+            if (isAnimating) return;
+
+            const nextIndex = currentDay + direction;
+
+            if (nextIndex < 0 || nextIndex >= spreads.length) return;
+
+            isAnimating = true;
+
+            const oldSpread = spreads[currentDay];
+            const newSpread = spreads[nextIndex];
+
+            oldSpread.classList.add(
+                direction > 0 ? "slide-out-left" : "slide-out-right"
+            );
+
+            window.setTimeout(() => {
+                oldSpread.hidden = true;
+                oldSpread.classList.remove(
+                    "slide-out-left",
+                    "slide-out-right"
+                );
+
+                newSpread.hidden = false;
+                newSpread.classList.remove(
+                    "slide-in-left",
+                    "slide-in-right"
+                );
+
+                // Force a layout update before starting the animation.
+                void newSpread.offsetWidth;
+
+                newSpread.classList.add(
+                    direction > 0 ? "slide-in-left" : "slide-in-right"
+                );
+
+                currentDay = nextIndex;
+                updateDayControls();
+
+                window.setTimeout(() => {
+                    newSpread.classList.remove(
+                        "slide-in-left",
+                        "slide-in-right"
+                    );
+
+                    isAnimating = false;
+                }, 370);
+            }, 280);
         }
-    });
-</script>
 
+        prevDay.addEventListener("click", () => changeDay(-1));
+        nextDay.addEventListener("click", () => changeDay(1));
 
+        updateDayControls();
 
+        // IMAGE MODAL
+        const clickTexts = document.querySelectorAll("[data-image]");
+        const imageModal = document.getElementById("imageModal");
+        const modalImage = imageModal.querySelector(".modal-content");
+        const closeButton = imageModal.querySelector(".close");
+
+        let lastClickedElement = null;
+
+        function openImage(element) {
+            lastClickedElement = element;
+            modalImage.src = element.dataset.image;
+            imageModal.hidden = false;
+            closeButton.focus();
+        }
+
+        function closeImage() {
+            imageModal.hidden = true;
+            modalImage.src = "";
+
+            if (lastClickedElement) {
+                lastClickedElement.focus();
+            }
+        }
+
+        clickTexts.forEach((element) => {
+            element.addEventListener("click", () => openImage(element));
+
+            // Images and text controls can also be activated by keyboard.
+            if (element.matches(".click-text, .day-photo")) {
+                element.addEventListener("keydown", (event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        openImage(element);
+                    }
+                });
+            }
+        });
+
+        closeButton.addEventListener("click", closeImage);
+
+        imageModal.addEventListener("click", (event) => {
+            if (event.target === imageModal) {
+                closeImage();
+            }
+        });
+
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape" && !imageModal.hidden) {
+                closeImage();
+            }
+        });
+    </script>
 </body>
 </html>
